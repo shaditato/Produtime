@@ -4,9 +4,14 @@ export function AppReducer(state, action) {
       return {
         ...state,
         activeTimers: [
-          ...state.activeTimers,
           { createdAt: Date.now(), projectId: action.payload.projectId },
+          ...state.activeTimers,
         ],
+      };
+    case "GET_PROJECTS":
+      return {
+        ...state,
+        projects: action.payload,
       };
     case "STOP_TIMER":
       return {

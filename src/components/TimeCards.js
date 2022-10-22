@@ -10,24 +10,17 @@ import {
 import { GlobalContext } from "../context/GlobalState";
 import { Timer } from "./Timer";
 import { Stop } from "@mui/icons-material";
-import { styled } from "@mui/system";
-
-const Container = styled(Box)({
-  backgroundColor: "red",
-  display: "flex",
-  flex: 1,
-  padding: 1,
-  overflow: "auto",
-  scrollbarWidth: 0,
-});
 
 export function TimeCards() {
   const { activeTimers, projects, stopTimer } = useContext(GlobalContext);
 
   function endTimer(event) {
-    console.log({ activeTimers });
-    console.log({ createdAt: event.currentTarget.dataset.created });
-    stopTimer({ createdAt: event.currentTarget.dataset.created });
+    stopTimer({
+      ...activeTimers.find(
+        (timer) => timer.createdAt === +event.currentTarget.dataset.created
+      ),
+      uid: 1,
+    });
   }
 
   return (
@@ -48,33 +41,39 @@ export function TimeCards() {
       }}
     >
       <Box sx={{ display: "flex", minHeight: "min-content" }}>
-        {activeTimers.map((timer) => (
-          <Card
-            key={timer.createdAt}
-            sx={{
-              backgroundColor: projects[timer.projectId].colour,
-              margin: 1,
-              width: 275,
-            }}
-          >
-            <CardContent>
-              <Timer offsetTimestamp={timer.createdAt} />
-              <Typography variant="subtitle1" color="text.secondary">
-                {projects[timer.projectId].name}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                color="inherit"
-                data-created={timer.createdAt}
-                onClick={endTimer}
-                startIcon={<Stop />}
-              >
-                Stop Timer
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
+        {activeTimers.map((timer) => {
+          const project = projects.find(
+            (project) => project.id === timer.projectId
+          );
+
+          return (
+            <Card
+              key={timer.createdAt}
+              sx={{
+                backgroundColor: project.colour,
+                margin: 1,
+                width: 275,
+              }}
+            >
+              <CardContent>
+                <Timer offsetTimestamp={timer.createdAt} />
+                <Typography variant="subtitle1" color="text.secondary">
+                  {project.name}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  color="inherit"
+                  data-created={timer.createdAt}
+                  onClick={endTimer}
+                  startIcon={<Stop />}
+                >
+                  Stop Timer
+                </Button>
+              </CardActions>
+            </Card>
+          );
+        })}
       </Box>
     </Box>
   );
