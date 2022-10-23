@@ -23,7 +23,7 @@ export function TimeButton(props) {
 
   useEffect(() => {
     getProjects({ uid: "1" }); // temporary uid before implementing auth
-  });
+  }, []);
 
   return (
     <>
@@ -36,8 +36,8 @@ export function TimeButton(props) {
         New Timer
       </InvertedButton>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        {projects.map((project, i) => (
-          <MenuItem data-id={project.id} key={i} onClick={startTimer}>
+        {Object.entries(projects).map(([projectId, project]) => (
+          <MenuItem data-id={projectId} key={projectId} onClick={startTimer}>
             <ListItemIcon>
               <Circle sx={{ color: project.colour }} />
             </ListItemIcon>

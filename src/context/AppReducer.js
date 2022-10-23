@@ -13,12 +13,18 @@ export function AppReducer(state, action) {
         ...state,
         projects: action.payload,
       };
+    case "GET_TIMERS":
+      return {
+        ...state,
+        timers: action.payload,
+      };
     case "STOP_TIMER":
       return {
         ...state,
         activeTimers: state.activeTimers.filter(
           (timer) => timer.createdAt !== +action.payload.createdAt
         ),
+        timers: [action.payload, ...state.timers],
       };
     default:
       return state;

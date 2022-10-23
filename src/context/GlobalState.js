@@ -6,7 +6,8 @@ import { db } from "../firebase/config";
 const initialState = {
   activeTimers: [],
   user: undefined,
-  projects: [],
+  projects: {},
+  timers: [],
 };
 
 export const GlobalContext = createContext(initialState);
@@ -34,9 +35,27 @@ export function GlobalProvider({ children }) {
       );
       dispatch({
         type: "GET_PROJECTS",
-        payload: querySnapshot.docs.map((doc) => {
-          return { ...doc.data(), id: doc.id };
-        }),
+        payload: querySnapshot.docs.reduce((projects, doc) => {
+          return {
+            ...projects,
+            [doc.id]: doc.data(),
+          };
+        }, {}),
+      });
+    } catch (error) {}
+  };
+
+  /** Read timers from database and load in state
+   * @param {{ uid: String }} payload uid of signed in user
+   */
+  const getTimers = async ({ uid }) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "timers"), where("uid", "==", uid))
+      );
+      dispatch({
+        type: "GET_TIMERS",
+        payload: querySnapshot.docs.map((doc) => doc.data()),
       });
     } catch (error) {}
   };
@@ -48,15 +67,17 @@ export function GlobalProvider({ children }) {
     const { createdAt, projectId, uid } = payload;
 
     try {
-      await addDoc(collection(db, "timers"), {
+      const timer = {
         createdAt,
         endedAt: Date.now(),
         projectId,
         uid,
-      });
+      };
+
+      await addDoc(collection(db, "timers"), timer);
       dispatch({
         type: "STOP_TIMER",
-        payload,
+        payload: timer,
       });
     } catch (error) {}
   };
@@ -67,6 +88,7 @@ export function GlobalProvider({ children }) {
         ...state,
         createTimer,
         getProjects,
+        getTimers,
         stopTimer,
       }}
     >

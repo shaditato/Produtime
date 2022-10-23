@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { GlobalContext } from "../context/GlobalState";
-import { Timer } from "./Timer";
+import { ActiveTimer } from "./ActiveTimer";
 import { Stop } from "@mui/icons-material";
 
 export function TimeCards() {
@@ -19,7 +19,7 @@ export function TimeCards() {
       ...activeTimers.find(
         (timer) => timer.createdAt === +event.currentTarget.dataset.created
       ),
-      uid: 1,
+      uid: "1",
     });
   }
 
@@ -42,9 +42,7 @@ export function TimeCards() {
     >
       <Box sx={{ display: "flex", minHeight: "min-content" }}>
         {activeTimers.map((timer) => {
-          const project = projects.find(
-            (project) => project.id === timer.projectId
-          );
+          const project = projects[timer.projectId] || {};
 
           return (
             <Card
@@ -56,7 +54,7 @@ export function TimeCards() {
               }}
             >
               <CardContent>
-                <Timer offsetTimestamp={timer.createdAt} />
+                <ActiveTimer offsetTimestamp={timer.createdAt} />
                 <Typography variant="subtitle1" color="text.secondary">
                   {project.name}
                 </Typography>

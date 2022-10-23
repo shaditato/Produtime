@@ -1,10 +1,8 @@
 import { Typography } from "@mui/material";
 import { useStopwatch } from "react-timer-hook";
+import { formatDigits as format } from "../utils/format";
 
-// Format each number to be displayed with at least two digits
-const format = (n) => (n < 10 ? `0${n}` : n);
-
-export function Timer({ offsetTimestamp }) {
+export function ActiveTimer({ offsetTimestamp }) {
   const { seconds, minutes, hours, days } = useStopwatch({
     autoStart: true,
     offsetTimestamp,
