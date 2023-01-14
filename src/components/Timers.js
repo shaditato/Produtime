@@ -4,10 +4,10 @@ import { GlobalContext } from "../context/GlobalState";
 import { msToHMS } from "../utils/format";
 
 export function Timers() {
-  const { projects, timers, getTimers } = useContext(GlobalContext);
+  const { projects, timers, user, getTimers } = useContext(GlobalContext);
 
   useEffect(() => {
-    getTimers({ uid: 1 }); // temporary uid before implementing auth
+    getTimers({ uid: user.uid });
   }, []);
 
   return (

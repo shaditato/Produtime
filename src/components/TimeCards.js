@@ -13,14 +13,14 @@ import { ActiveTimer } from "./ActiveTimer";
 import { Stop } from "@mui/icons-material";
 
 export function TimeCards() {
-  const { activeTimers, projects, stopTimer } = useContext(GlobalContext);
+  const { activeTimers, projects, user, stopTimer } = useContext(GlobalContext);
 
   function endTimer(event) {
     stopTimer({
       ...activeTimers.find(
         (timer) => timer.createdAt === +event.currentTarget.dataset.created
       ),
-      uid: "1",
+      uid: user.uid,
     });
   }
 

@@ -18,6 +18,11 @@ export function AppReducer(state, action) {
         ...state,
         timers: action.payload,
       };
+    case "SIGN_IN":
+      return {
+        ...state,
+        user: action.payload,
+      };
     case "STOP_TIMER":
       return {
         ...state,

@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { ListItemIcon, Menu, MenuItem } from "@mui/material";
-import { Add, Circle } from "@mui/icons-material";
+import { Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { Add, Circle, Settings } from "@mui/icons-material";
 import { GlobalContext } from "../context/GlobalState";
 import { InvertedButton } from "./InvertedButton";
 
 export function TimeButton(props) {
-  const { createTimer, projects, getProjects } = useContext(GlobalContext);
+  const { createTimer, projects, user, getProjects } =
+    useContext(GlobalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -22,7 +23,7 @@ export function TimeButton(props) {
   }
 
   useEffect(() => {
-    getProjects({ uid: "1" }); // temporary uid before implementing auth
+    getProjects({ uid: user.uid });
   }, []);
 
   return (
@@ -36,6 +37,13 @@ export function TimeButton(props) {
         New Timer
       </InvertedButton>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        <MenuItem>
+          <ListItemIcon>
+            <Settings />
+          </ListItemIcon>
+          Manage Projects
+        </MenuItem>
+        <Divider variant="middle" />
         {Object.entries(projects).map(([projectId, project]) => (
           <MenuItem data-id={projectId} key={projectId} onClick={startTimer}>
             <ListItemIcon>
