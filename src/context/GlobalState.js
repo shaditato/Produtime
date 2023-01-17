@@ -18,8 +18,6 @@ export function GlobalProvider({ children }) {
   // Update user in state when Firebase updates auth
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log(user);
-
       dispatch({
         type: "SIGN_IN",
         payload: user,
