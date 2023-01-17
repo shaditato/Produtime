@@ -1,5 +1,6 @@
-import { AccountCircle, List } from "@mui/icons-material";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { List } from "@mui/icons-material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AccountButton } from "./AccountButton";
 import { TimeButton } from "./TimeButton";
 import { InvertedButton } from "./InvertedButton";
 
@@ -23,9 +24,7 @@ export function TopAppBar() {
         >
           Projects
         </InvertedButton>
-        <IconButton>
-          <AccountCircle sx={{ color: "#fff" }} />
-        </IconButton>
+        <AccountButton />
       </Toolbar>
     </AppBar>
   );

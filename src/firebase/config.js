@@ -22,3 +22,9 @@ export async function signInWithGoogle() {
     await signInWithPopup(auth, provider);
   } catch (error) {}
 }
+
+export function signOut() {
+  try {
+    auth.signOut();
+  } catch (error) {}
+}
