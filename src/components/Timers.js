@@ -40,30 +40,39 @@ export function Timers() {
 
   return (
     <>
-      {Object.keys(datedTimers).map((date) => (
-        <Box key={date}>
-          <Typography sx={{ marginX: 3 }} variant="overline">
-            {date}
+      {timers.length !== 0 ? (
+        Object.keys(datedTimers).map((date) => (
+          <Box key={date}>
+            <Typography sx={{ marginX: 3 }} variant="overline">
+              {date}
+            </Typography>
+            {datedTimers[date].map((timer) => (
+              <Card elevation={0} key={timer.id}>
+                <CardActionArea>
+                  <Toolbar>
+                    <Chip
+                      label={msToHMS(
+                        timer.endedAt.toMillis() - timer.createdAt.toMillis()
+                      )}
+                      sx={{ backgroundColor: projects[timer.projectId].colour }}
+                    />
+                    <Typography sx={{ marginX: 1 }}>
+                      {projects[timer.projectId].name}
+                    </Typography>
+                  </Toolbar>
+                </CardActionArea>
+              </Card>
+            ))}
+          </Box>
+        ))
+      ) : (
+        <Box sx={{ marginY: 2, textAlign: "center" }}>
+          <Typography variant="h4">No timers yet!</Typography>
+          <Typography sx={{ marginY: 1 }}>
+            Create a project and start a timer with the button above
           </Typography>
-          {datedTimers[date].map((timer) => (
-            <Card elevation={0} key={timer.id}>
-              <CardActionArea>
-                <Toolbar>
-                  <Chip
-                    label={msToHMS(
-                      timer.endedAt.toMillis() - timer.createdAt.toMillis()
-                    )}
-                    sx={{ backgroundColor: projects[timer.projectId].colour }}
-                  />
-                  <Typography sx={{ marginX: 1 }}>
-                    {projects[timer.projectId].name}
-                  </Typography>
-                </Toolbar>
-              </CardActionArea>
-            </Card>
-          ))}
         </Box>
-      ))}
+      )}
     </>
   );
 }

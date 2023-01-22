@@ -38,7 +38,7 @@ export function TimeButton(props) {
           </ListItemIcon>
           Manage Projects
         </MenuItem>
-        <Divider variant="middle" />
+        {Object.keys(projects).length !== 0 && <Divider variant="middle" />}
         {Object.entries(projects).map(([projectId, project]) => (
           <MenuItem data-id={projectId} key={projectId} onClick={startTimer}>
             <ListItemIcon>
