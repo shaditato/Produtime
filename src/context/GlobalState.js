@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { Timestamp, addDoc, collection, getDocs } from "firebase/firestore";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
 
@@ -17,77 +17,82 @@ export function GlobalProvider({ children }) {
 
   // Update user in state when Firebase updates auth
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      dispatch({
-        type: "SIGN_IN",
-        payload: user,
-      });
+    auth.onAuthStateChanged(async (user) => {
+      try {
+        // Clear state on sign-out
+        if (user === null) {
+          dispatch({
+            type: "SET_STATE",
+            payload: { user },
+          });
+          return;
+        }
+        // Read projects & timers from database on sign-in
+        const projectsSnapshot = await getDocs(
+          collection(db, "users", user.uid, "projects")
+        );
+        const timersSnapshot = await getDocs(
+          collection(db, "users", user.uid, "timers")
+        );
+        const projects = projectsSnapshot.docs.reduce((projects, doc) => {
+          return {
+            ...projects,
+            [doc.id]: doc.data(),
+          };
+        }, {});
+        const timers = timersSnapshot.docs.map((doc) => {
+          return {
+            ...doc.data(),
+            id: doc.id,
+          };
+        });
+        dispatch({
+          type: "SET_STATE",
+          payload: {
+            user,
+            projects,
+            timers,
+          },
+        });
+      } catch (error) {}
     });
   }, []);
 
   /** Create activeTimer in state
    * @param {{ projectId: String }} payload projectId of project associated with timer
    */
-  const createTimer = (payload) => {
+  const createTimer = ({ projectId }) => {
+    const payload = {
+      createdAt: Timestamp.now(),
+      projectId,
+    };
     dispatch({
       type: "CREATE_TIMER",
       payload,
     });
   };
 
-  /** Read projects from database and load in state
-   * @param {{ uid: String }} payload uid of signed in user
-   */
-  const getProjects = async ({ uid }) => {
-    try {
-      const querySnapshot = await getDocs(
-        query(collection(db, "projects"), where("uid", "==", uid))
-      );
-      dispatch({
-        type: "GET_PROJECTS",
-        payload: querySnapshot.docs.reduce((projects, doc) => {
-          return {
-            ...projects,
-            [doc.id]: doc.data(),
-          };
-        }, {}),
-      });
-    } catch (error) {}
-  };
-
-  /** Read timers from database and load in state
-   * @param {{ uid: String }} payload uid of signed in user
-   */
-  const getTimers = async ({ uid }) => {
-    try {
-      const querySnapshot = await getDocs(
-        query(collection(db, "timers"), where("uid", "==", uid))
-      );
-      dispatch({
-        type: "GET_TIMERS",
-        payload: querySnapshot.docs.map((doc) => doc.data()),
-      });
-    } catch (error) {}
-  };
-
   /** Remove activeTimer from state and write to database
-   * @param {{ createdAt: Number, projectId: String, uid: String }} payload uid of signed in user
+   * @param {{ createdAt: Timestamp, projectId: String, uid: String }} payload activeTimer info + uid of signed in user
    */
-  const stopTimer = async (payload) => {
-    const { createdAt, projectId, uid } = payload;
-
+  const stopTimer = async ({ createdAt, projectId, uid }) => {
     try {
       const timer = {
         createdAt,
-        endedAt: Date.now(),
+        endedAt: Timestamp.now(),
         projectId,
-        uid,
       };
+      const docRef = await addDoc(
+        collection(db, "users", uid, "timers"),
+        timer
+      );
 
-      await addDoc(collection(db, "timers"), timer);
       dispatch({
         type: "STOP_TIMER",
-        payload: timer,
+        payload: {
+          ...timer,
+          id: docRef.id,
+        },
       });
     } catch (error) {}
   };
@@ -97,8 +102,6 @@ export function GlobalProvider({ children }) {
       value={{
         ...state,
         createTimer,
-        getProjects,
-        getTimers,
         stopTimer,
       }}
     >

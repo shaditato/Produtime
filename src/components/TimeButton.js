@@ -1,12 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { Add, Circle, Settings } from "@mui/icons-material";
 import { GlobalContext } from "../context/GlobalState";
 import { InvertedButton } from "./InvertedButton";
 
 export function TimeButton(props) {
-  const { createTimer, projects, user, getProjects } =
-    useContext(GlobalContext);
+  const { createTimer, projects } = useContext(GlobalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -21,10 +20,6 @@ export function TimeButton(props) {
     handleClose();
     createTimer({ projectId: event.currentTarget.dataset.id });
   }
-
-  useEffect(() => {
-    getProjects({ uid: user.uid });
-  }, []);
 
   return (
     <>

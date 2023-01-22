@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   Box,
   Card,
@@ -11,11 +11,7 @@ import { GlobalContext } from "../context/GlobalState";
 import { msToHMS } from "../utils/format";
 
 export function Timers() {
-  const { projects, timers, user, getTimers } = useContext(GlobalContext);
-
-  useEffect(() => {
-    getTimers({ uid: user.uid });
-  }, []);
+  const { projects, timers } = useContext(GlobalContext);
 
   // Create an object to map timers to date strings
   const datedTimers = timers.reduce((accumulator, timer) => {
@@ -25,10 +21,9 @@ export function Timers() {
       month: "long",
       day: "numeric",
     };
-    const date = new Date(timer.createdAt).toLocaleDateString(
-      undefined,
-      options
-    );
+    const date = timer.createdAt
+      .toDate()
+      .toLocaleDateString(undefined, options);
 
     if (accumulator[date] === undefined) {
       return {
@@ -51,11 +46,13 @@ export function Timers() {
             {date}
           </Typography>
           {datedTimers[date].map((timer) => (
-            <Card elevation={0} key={timer.createdAt}>
+            <Card elevation={0} key={timer.id}>
               <CardActionArea>
                 <Toolbar>
                   <Chip
-                    label={msToHMS(timer.endedAt - timer.createdAt)}
+                    label={msToHMS(
+                      timer.endedAt.toMillis() - timer.createdAt.toMillis()
+                    )}
                     sx={{ backgroundColor: projects[timer.projectId].colour }}
                   />
                   <Typography sx={{ marginX: 1 }}>

@@ -18,7 +18,8 @@ export function TimeCards() {
   function endTimer(event) {
     stopTimer({
       ...activeTimers.find(
-        (timer) => timer.createdAt === +event.currentTarget.dataset.created
+        (timer) =>
+          timer.createdAt.toMillis() === +event.currentTarget.dataset.created
       ),
       uid: user.uid,
     });
@@ -45,10 +46,11 @@ export function TimeCards() {
         <Box sx={{ display: "flex", minHeight: "min-content" }}>
           {activeTimers.map((timer) => {
             const project = projects[timer.projectId] || {};
+            const createdAtMS = timer.createdAt.toMillis();
 
             return (
               <Card
-                key={timer.createdAt}
+                key={createdAtMS}
                 sx={{
                   backgroundColor: project.colour,
                   margin: 1,
@@ -56,7 +58,7 @@ export function TimeCards() {
                 }}
               >
                 <CardContent>
-                  <ActiveTimer offsetTimestamp={timer.createdAt} />
+                  <ActiveTimer offsetTimestamp={createdAtMS} />
                   <Typography variant="subtitle1" color="text.secondary">
                     {project.name}
                   </Typography>
@@ -64,7 +66,7 @@ export function TimeCards() {
                 <CardActions>
                   <Button
                     color="inherit"
-                    data-created={timer.createdAt}
+                    data-created={createdAtMS}
                     onClick={endTimer}
                     startIcon={<Stop />}
                   >

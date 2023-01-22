@@ -4,30 +4,26 @@ export function AppReducer(state, action) {
       return {
         ...state,
         activeTimers: [
-          { createdAt: Date.now(), projectId: action.payload.projectId },
+          {
+            createdAt: action.payload.createdAt,
+            projectId: action.payload.projectId,
+          },
           ...state.activeTimers,
         ],
       };
-    case "GET_PROJECTS":
+    case "SET_STATE":
       return {
         ...state,
-        projects: action.payload,
-      };
-    case "GET_TIMERS":
-      return {
-        ...state,
-        timers: action.payload,
-      };
-    case "SIGN_IN":
-      return {
-        ...state,
-        user: action.payload,
+        user: action.payload.user,
+        projects: action.payload.projects ?? {},
+        timers: action.payload.timers ?? [],
       };
     case "STOP_TIMER":
       return {
         ...state,
         activeTimers: state.activeTimers.filter(
-          (timer) => timer.createdAt !== +action.payload.createdAt
+          (timer) =>
+            timer.createdAt.toMillis() !== action.payload.createdAt.toMillis()
         ),
         timers: [action.payload, ...state.timers],
       };
