@@ -1,8 +1,6 @@
-import { List } from "@mui/icons-material";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { AccountButton } from "./AccountButton";
 import { TimeButton } from "./TimeButton";
-import { InvertedButton } from "./InvertedButton";
 
 export function TopAppBar() {
   return (
@@ -16,15 +14,10 @@ export function TopAppBar() {
         >
           Produtime
         </Typography>
-        <TimeButton sx={{ marginX: 1 }} />
-        <InvertedButton
-          sx={{ marginX: 1 }}
-          startIcon={<List />}
-          variant="contained"
-        >
-          Projects
-        </InvertedButton>
-        <AccountButton />
+        <Box sx={{ marginLeft: "auto", marginRight: 0 }}>
+          <TimeButton sx={{ marginX: 1 }} />
+          <AccountButton />
+        </Box>
       </Toolbar>
     </AppBar>
   );
