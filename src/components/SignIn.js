@@ -29,6 +29,8 @@ export function SignIn() {
               flexDirection: "column",
               height: "100vh",
               justifyContent: "center",
+              padding: 2,
+              textAlign: "center",
             }}
           >
             <Typography variant="h3" sx={{ color: "#fff" }}>

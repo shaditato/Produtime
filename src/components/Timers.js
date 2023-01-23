@@ -70,7 +70,7 @@ export function Timers() {
           </Box>
         ))
       ) : (
-        <Box sx={{ marginY: 2, textAlign: "center" }}>
+        <Box sx={{ marginY: 2, padding: 2, textAlign: "center" }}>
           <Typography variant="h4">No timers yet!</Typography>
           <Typography sx={{ marginY: 1 }}>
             Create a project and start a timer with the button above
