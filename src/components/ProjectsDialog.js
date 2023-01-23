@@ -109,7 +109,7 @@ export function ProjectsDialog({ handleClose }) {
               ))}
             </Select>
             <TextField
-              defaultValue={projects[dialogState]?.name ?? undefined}
+              defaultValue={projects[dialogState]?.name ?? ""}
               onChange={(event) =>
                 setFormInput({ ...formInput, name: event.target.value })
               }
@@ -130,20 +130,3 @@ export function ProjectsDialog({ handleClose }) {
     </>
   );
 }
-
-// <Select
-// renderValue={(value) => {
-//   return (
-//     <Box sx={{ display: "flex", gap: 1 }}>
-//       <SvgIcon color="primary">
-//         <Circle sx={{ backgroundColor: "red" }} />
-//       </SvgIcon>
-//       jdlksajdklajsdlkj
-//     </Box>
-//   );
-// }}
-//   label="Colour"
-//   variant="standard"
-// >
-//   <MenuItem value={10}>ndsand,sandsamnd</MenuItem>
-// </Select>
