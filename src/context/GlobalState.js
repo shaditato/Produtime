@@ -1,5 +1,12 @@
 import { createContext, useEffect, useReducer } from "react";
-import { Timestamp, addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
 
@@ -58,6 +65,53 @@ export function GlobalProvider({ children }) {
     });
   }, []);
 
+  /** Add new project to database, load in state
+   * @param {{ name: String, colour: String, uid: String }} payload new project + uid of signed in user
+   */
+  const createProject = async ({ name, colour, uid }) => {
+    try {
+      const project = {
+        name,
+        colour,
+      };
+
+      const docRef = await addDoc(
+        collection(db, "users", uid, "projects"),
+        project
+      );
+
+      dispatch({
+        type: "SET_PROJECT",
+        payload: {
+          id: docRef.id,
+          project,
+        },
+      });
+    } catch (error) {}
+  };
+
+  /** Update project in database and state
+   * @param {{ id: String, name: String, colour: String, uid: String }} payload updated project + uid of signed in user
+   */
+  const updateProject = async ({ id, name, colour, uid }) => {
+    try {
+      const project = {
+        name,
+        colour,
+      };
+
+      await setDoc(doc(db, "users", uid, "projects", id), project);
+
+      dispatch({
+        type: "SET_PROJECT",
+        payload: {
+          id,
+          project,
+        },
+      });
+    } catch (error) {}
+  };
+
   /** Create activeTimer in state
    * @param {{ projectId: String }} payload projectId of project associated with timer
    */
@@ -101,6 +155,8 @@ export function GlobalProvider({ children }) {
     <GlobalContext.Provider
       value={{
         ...state,
+        createProject,
+        updateProject,
         createTimer,
         stopTimer,
       }}

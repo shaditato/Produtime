@@ -1,12 +1,15 @@
 import { useContext, useState } from "react";
-import { Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { Dialog, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { Add, Circle, Settings } from "@mui/icons-material";
-import { GlobalContext } from "../context/GlobalState";
 import { InvertedButton } from "./InvertedButton";
+import { ProjectsDialog } from "./ProjectsDialog";
+import { GlobalContext } from "../context/GlobalState";
+import { COLOURS } from "../data/constants";
 
 export function TimeButton(props) {
   const { createTimer, projects } = useContext(GlobalContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -14,6 +17,15 @@ export function TimeButton(props) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDialogOpen = () => {
+    handleClose();
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   function startTimer(event) {
@@ -32,7 +44,7 @@ export function TimeButton(props) {
         New Timer
       </InvertedButton>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem>
+        <MenuItem onClick={handleDialogOpen}>
           <ListItemIcon>
             <Settings />
           </ListItemIcon>
@@ -42,12 +54,15 @@ export function TimeButton(props) {
         {Object.entries(projects).map(([projectId, project]) => (
           <MenuItem data-id={projectId} key={projectId} onClick={startTimer}>
             <ListItemIcon>
-              <Circle sx={{ color: project.colour }} />
+              <Circle sx={{ color: COLOURS[project.colour] }} />
             </ListItemIcon>
             {project.name}
           </MenuItem>
         ))}
       </Menu>
+      <Dialog onClose={handleDialogClose} open={dialogOpen}>
+        <ProjectsDialog handleClose={handleDialogClose} />
+      </Dialog>
     </>
   );
 }

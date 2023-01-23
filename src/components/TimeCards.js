@@ -8,9 +8,10 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { GlobalContext } from "../context/GlobalState";
-import { ActiveTimer } from "./ActiveTimer";
 import { Stop } from "@mui/icons-material";
+import { ActiveTimer } from "./ActiveTimer";
+import { GlobalContext } from "../context/GlobalState";
+import { COLOURS } from "../data/constants";
 
 export function TimeCards() {
   const { activeTimers, projects, user, stopTimer } = useContext(GlobalContext);
@@ -52,7 +53,7 @@ export function TimeCards() {
               <Card
                 key={createdAtMS}
                 sx={{
-                  backgroundColor: project.colour,
+                  backgroundColor: COLOURS[project.colour],
                   margin: 1,
                   width: 275,
                 }}

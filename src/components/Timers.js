@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { GlobalContext } from "../context/GlobalState";
+import { COLOURS } from "../data/constants";
 import { msToHMS } from "../utils/format";
 
 export function Timers() {
@@ -54,7 +55,10 @@ export function Timers() {
                       label={msToHMS(
                         timer.endedAt.toMillis() - timer.createdAt.toMillis()
                       )}
-                      sx={{ backgroundColor: projects[timer.projectId].colour }}
+                      sx={{
+                        backgroundColor:
+                          COLOURS[projects[timer.projectId].colour],
+                      }}
                     />
                     <Typography sx={{ marginX: 1 }}>
                       {projects[timer.projectId].name}

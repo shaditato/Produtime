@@ -27,6 +27,14 @@ export function AppReducer(state, action) {
         ),
         timers: [action.payload, ...state.timers],
       };
+    case "SET_PROJECT":
+      return {
+        ...state,
+        projects: {
+          ...state.projects,
+          [action.payload.id]: action.payload.project,
+        },
+      };
     default:
       return state;
   }
