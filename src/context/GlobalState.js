@@ -5,7 +5,9 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   setDoc,
+  query,
 } from "firebase/firestore";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
@@ -39,7 +41,10 @@ export function GlobalProvider({ children }) {
           collection(db, "users", user.uid, "projects")
         );
         const timersSnapshot = await getDocs(
-          collection(db, "users", user.uid, "timers")
+          query(
+            collection(db, "users", user.uid, "timers"),
+            orderBy("createdAt", "desc")
+          )
         );
         const projects = projectsSnapshot.docs.reduce((projects, doc) => {
           return {
