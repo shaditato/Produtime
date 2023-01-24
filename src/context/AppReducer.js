@@ -22,8 +22,7 @@ export function AppReducer(state, action) {
       return {
         ...state,
         activeTimers: state.activeTimers.filter(
-          (timer) =>
-            timer.createdAt.toMillis() !== action.payload.createdAt.toMillis()
+          (timer) => !timer.createdAt.isEqual(action.payload.createdAt)
         ),
         timers: [action.payload, ...state.timers],
       };
