@@ -35,7 +35,7 @@ export function Timers() {
 
     return {
       ...accumulator,
-      [date]: [timer, ...accumulator[date]],
+      [date]: [...accumulator[date], timer],
     };
   }, {});
 
