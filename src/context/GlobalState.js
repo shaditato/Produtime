@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import {
   Timestamp,
   addDoc,
@@ -9,6 +9,7 @@ import {
   setDoc,
   query,
 } from "firebase/firestore";
+import { useToast } from "use-toast-mui";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
 
@@ -23,8 +24,10 @@ export const GlobalContext = createContext(initialState);
 
 export function GlobalProvider({ children }) {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+  const toast = useToast();
 
   // Update user in state when Firebase updates auth
+  const [initial, setInitial] = useState(true);
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       try {
@@ -34,6 +37,11 @@ export function GlobalProvider({ children }) {
             type: "SET_STATE",
             payload: { user },
           });
+          if (initial) {
+            setInitial(false);
+          } else {
+            toast.success("Signed out");
+          }
           return;
         }
         // Read projects & timers from database on sign-in
@@ -66,7 +74,10 @@ export function GlobalProvider({ children }) {
             timers,
           },
         });
-      } catch (error) {}
+        toast.success(`Signed in as ${user.displayName}`);
+      } catch (error) {
+        toast.error("Authentication failed");
+      }
     });
   }, []);
 
@@ -92,7 +103,10 @@ export function GlobalProvider({ children }) {
           project,
         },
       });
-    } catch (error) {}
+      toast.success(`Created new project "${name}"`);
+    } catch (error) {
+      toast.error("Failed to create new project");
+    }
   };
 
   /** Update project in database and state
@@ -114,7 +128,10 @@ export function GlobalProvider({ children }) {
           project,
         },
       });
-    } catch (error) {}
+      toast.success(`Updated project ${name}`);
+    } catch (error) {
+      toast.error("Failed to update project");
+    }
   };
 
   /** Create activeTimer in state
@@ -153,7 +170,10 @@ export function GlobalProvider({ children }) {
           id: docRef.id,
         },
       });
-    } catch (error) {}
+      toast.success("Created new timer record");
+    } catch (error) {
+      toast.error("Failed to create new timer record");
+    }
   };
 
   return (
