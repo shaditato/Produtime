@@ -34,14 +34,6 @@ export function TimeCards() {
           flex: 1,
           padding: 1,
           overflow: "auto",
-          scrollbarWidth: "thin",
-          "&::-webkit-scrollbar": {
-            height: "10px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            borderRadius: "10px",
-            backgroundColor: "#D3D3D3",
-          },
         }}
       >
         <Box sx={{ display: "flex", minHeight: "min-content" }}>

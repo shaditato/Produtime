@@ -28,7 +28,12 @@ export function AccountButton() {
       <IconButton onClick={handleClick}>
         <Avatar src={user.photoURL} />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        disableScrollLock
+        open={open}
+        onClose={handleClose}
+      >
         <MenuItem onClick={signOut}>
           <ListItemIcon>
             <Logout />

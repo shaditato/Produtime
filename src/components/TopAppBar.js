@@ -4,7 +4,7 @@ import { TimeButton } from "./TimeButton";
 
 export function TopAppBar() {
   return (
-    <AppBar sx={{ position: "static" }}>
+    <AppBar sx={{ position: "sticky" }}>
       <Toolbar>
         <Typography
           variant="h6"
@@ -14,7 +14,12 @@ export function TopAppBar() {
         >
           Produtime
         </Typography>
-        <Box sx={{ marginLeft: "auto", marginRight: 0 }}>
+        <Box
+          sx={{
+            marginLeft: "auto",
+            marginRight: 0,
+          }}
+        >
           <TimeButton sx={{ marginX: 1 }} />
           <AccountButton />
         </Box>

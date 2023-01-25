@@ -16,8 +16,15 @@ export function SignIn() {
       {user ? (
         <>
           <TopAppBar />
-          <TimeCards />
-          <Timers />
+          <Box
+            sx={{
+              height: "calc(100vh - 64px)",
+              overflowY: "scroll",
+            }}
+          >
+            <TimeCards />
+            <Timers />
+          </Box>
         </>
       ) : (
         <>

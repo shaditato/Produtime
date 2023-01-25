@@ -43,7 +43,12 @@ export function TimeButton(props) {
       >
         New Timer
       </InvertedButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        disableScrollLock
+        open={open}
+        onClose={handleClose}
+      >
         <MenuItem onClick={handleDialogOpen}>
           <ListItemIcon>
             <Settings />
@@ -60,7 +65,7 @@ export function TimeButton(props) {
           </MenuItem>
         ))}
       </Menu>
-      <Dialog onClose={handleDialogClose} open={dialogOpen}>
+      <Dialog onClose={handleDialogClose} open={dialogOpen} scroll="body">
         <ProjectsDialog handleClose={handleDialogClose} />
       </Dialog>
     </>
