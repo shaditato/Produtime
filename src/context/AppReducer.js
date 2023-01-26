@@ -11,19 +11,12 @@ export function AppReducer(state, action) {
           ...state.activeTimers,
         ],
       };
-    case "SIGN_IN":
+    case "SET_STATE":
       return {
         ...state,
         user: action.payload.user,
         projects: action.payload.projects ?? {},
         timers: action.payload.timers ?? [],
-      };
-    case "SIGN_OUT":
-      return {
-        activeTimers: [],
-        user: null,
-        projects: {},
-        timers: [],
       };
     case "STOP_TIMER":
       return {
