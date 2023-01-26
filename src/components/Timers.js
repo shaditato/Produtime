@@ -1,18 +1,10 @@
 import { useContext } from "react";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  Chip,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { TimerRecord } from "./TimerRecord";
 import { GlobalContext } from "../context/GlobalState";
-import { COLOURS } from "../data/constants";
-import { msToHMS } from "../utils/format";
 
 export function Timers() {
-  const { projects, timers } = useContext(GlobalContext);
+  const { timers } = useContext(GlobalContext);
 
   // Create an object to map timers to date strings
   const datedTimers = timers.reduce((accumulator, timer) => {
@@ -48,24 +40,7 @@ export function Timers() {
               {date}
             </Typography>
             {datedTimers[date].map((timer) => (
-              <Card elevation={0} key={timer.id}>
-                <CardActionArea>
-                  <Toolbar>
-                    <Chip
-                      label={msToHMS(
-                        timer.endedAt.toMillis() - timer.createdAt.toMillis()
-                      )}
-                      sx={{
-                        backgroundColor:
-                          COLOURS[projects[timer.projectId].colour],
-                      }}
-                    />
-                    <Typography sx={{ marginX: 1 }}>
-                      {projects[timer.projectId].name}
-                    </Typography>
-                  </Toolbar>
-                </CardActionArea>
-              </Card>
+              <TimerRecord key={timer.id} timer={timer} />
             ))}
           </Box>
         ))
