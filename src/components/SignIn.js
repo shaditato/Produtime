@@ -35,7 +35,7 @@ export function SignIn() {
               flexDirection: "column",
               height: "100vh",
               justifyContent: "center",
-              padding: 2,
+              paddingX: 2,
               textAlign: "center",
             }}
           >

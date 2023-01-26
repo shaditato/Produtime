@@ -13,10 +13,11 @@ import { useToast } from "use-toast-mui";
 import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const initialState = {
   activeTimers: [],
-  user: auth.currentUser,
+  user: null,
   projects: {},
   timers: [],
 };
