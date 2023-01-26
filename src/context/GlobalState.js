@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import {
   Timestamp,
   addDoc,
@@ -10,6 +10,7 @@ import {
   query,
 } from "firebase/firestore";
 import { useToast } from "use-toast-mui";
+import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -26,6 +27,49 @@ export const GlobalContext = createContext(initialState);
 export function GlobalProvider({ children }) {
   const [state, dispatch] = useReducer(AppReducer, initialState);
   const toast = useToast();
+
+  // Update user in state when Firebase updates auth
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
+      try {
+        // Ignore if signing out
+        if (user === null) return;
+        // Read projects & timers from database on sign-in
+        const projectsSnapshot = await getDocs(
+          collection(db, "users", user.uid, "projects")
+        );
+        const timersSnapshot = await getDocs(
+          query(
+            collection(db, "users", user.uid, "timers"),
+            orderBy("createdAt", "desc")
+          )
+        );
+        const projects = projectsSnapshot.docs.reduce((projects, doc) => {
+          return {
+            ...projects,
+            [doc.id]: doc.data(),
+          };
+        }, {});
+        const timers = timersSnapshot.docs.map((doc) => {
+          return {
+            ...doc.data(),
+            id: doc.id,
+          };
+        });
+        dispatch({
+          type: "SET_STATE",
+          payload: {
+            user,
+            projects,
+            timers,
+          },
+        });
+        toast.success(`Signed in as ${user.displayName}`);
+      } catch (error) {
+        toast.error("Authentication failed");
+      }
+    });
+  }, []);
 
   /** Add new project to database, load in state
    * @param {{ name: String, colour: String, uid: String }} payload new project + uid of signed in user
@@ -127,38 +171,7 @@ export function GlobalProvider({ children }) {
   const signIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      const { user } = await signInWithPopup(auth, provider);
-      // Read projects & timers from database on sign-in
-      const projectsSnapshot = await getDocs(
-        collection(db, "users", user.uid, "projects")
-      );
-      const timersSnapshot = await getDocs(
-        query(
-          collection(db, "users", user.uid, "timers"),
-          orderBy("createdAt", "desc")
-        )
-      );
-      const projects = projectsSnapshot.docs.reduce((projects, doc) => {
-        return {
-          ...projects,
-          [doc.id]: doc.data(),
-        };
-      }, {});
-      const timers = timersSnapshot.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          id: doc.id,
-        };
-      });
-      dispatch({
-        type: "SIGN_IN",
-        payload: {
-          user,
-          projects,
-          timers,
-        },
-      });
-      toast.success(`Signed in as ${user.displayName}`);
+      await signInWithPopup(auth, provider);
     } catch (error) {
       toast.error("Failed to sign in");
     }
@@ -169,7 +182,10 @@ export function GlobalProvider({ children }) {
   const signOut = async () => {
     try {
       await auth.signOut();
-      dispatch({ type: "SIGN_OUT" });
+      dispatch({
+        type: "SET_STATE",
+        payload: { user: null },
+      });
       toast.success("Signed out");
     } catch (error) {
       toast.error("Failed to sign out");
