@@ -6,10 +6,9 @@ import { TimeCards } from "./TimeCards";
 import { Timers } from "./Timers";
 import { TopAppBar } from "./TopAppBar";
 import { GlobalContext } from "../context/GlobalState";
-import { signInWithGoogle } from "../firebase/config";
 
 export function SignIn() {
-  const { user } = useContext(GlobalContext);
+  const { user, signIn } = useContext(GlobalContext);
 
   return (
     <>
@@ -47,7 +46,7 @@ export function SignIn() {
               Keep track of the time you spend being productive
             </Typography>
             <InvertedButton
-              onClick={signInWithGoogle}
+              onClick={signIn}
               startIcon={<Google />}
               sx={{ marginY: 1 }}
               variant="outline"

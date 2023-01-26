@@ -8,10 +8,9 @@ import {
 } from "@mui/material";
 import { Logout } from "@mui/icons-material";
 import { GlobalContext } from "../context/GlobalState";
-import { signOut } from "../firebase/config";
 
 export function AccountButton() {
-  const { user } = useContext(GlobalContext);
+  const { user, signOut } = useContext(GlobalContext);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
