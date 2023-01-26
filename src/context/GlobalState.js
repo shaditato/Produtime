@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import {
   Timestamp,
   addDoc,
@@ -10,6 +10,7 @@ import {
   query,
 } from "firebase/firestore";
 import { useToast } from "use-toast-mui";
+import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { AppReducer } from "./AppReducer";
 import { auth, db } from "../firebase/config";
 
@@ -27,23 +28,11 @@ export function GlobalProvider({ children }) {
   const toast = useToast();
 
   // Update user in state when Firebase updates auth
-  const [initial, setInitial] = useState(true);
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       try {
-        // Clear state on sign-out
-        if (user === null) {
-          dispatch({
-            type: "SET_STATE",
-            payload: { user },
-          });
-          if (initial) {
-            setInitial(false);
-          } else {
-            toast.success("Signed out");
-          }
-          return;
-        }
+        // Ignore if signing out
+        if (user === null) return;
         // Read projects & timers from database on sign-in
         const projectsSnapshot = await getDocs(
           collection(db, "users", user.uid, "projects")
@@ -176,6 +165,32 @@ export function GlobalProvider({ children }) {
     }
   };
 
+  /** Prompt for Google sign-in, fetch data from Firestore database
+   */
+  const signIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      toast.error("Failed to sign in");
+    }
+  };
+
+  /** Sign-out and clear state
+   */
+  const signOut = async () => {
+    try {
+      await auth.signOut();
+      dispatch({
+        type: "SET_STATE",
+        payload: { user: null },
+      });
+      toast.success("Signed out");
+    } catch (error) {
+      toast.error("Failed to sign out");
+    }
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -184,6 +199,8 @@ export function GlobalProvider({ children }) {
         updateProject,
         createTimer,
         stopTimer,
+        signIn,
+        signOut,
       }}
     >
       {children}
