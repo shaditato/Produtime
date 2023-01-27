@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import {
+  Box,
   Chip,
   DialogTitle,
   List,
@@ -8,12 +9,13 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { TagChip } from "./TagChip";
 import { GlobalContext } from "../context/GlobalState";
 import { COLOURS } from "../data/constants";
 import { msToHMS } from "../utils/format";
 
 export function TimerDialog({ timer }) {
-  const { projects } = useContext(GlobalContext);
+  const { projects, tags } = useContext(GlobalContext);
   const project = projects[timer.projectId];
 
   return (
@@ -35,6 +37,13 @@ export function TimerDialog({ timer }) {
           {timer.createdAt.toDate().toLocaleString()} to{"\n"}
           {timer.endedAt.toDate().toLocaleString()}
         </Typography>
+        {timer.tags?.length > 0 && (
+          <Box>
+            {timer.tags.map((id) => (
+              <TagChip key={`${timer.id}-dialog:${id}`} label={tags[id]} />
+            ))}
+          </Box>
+        )}
       </DialogTitle>
       <List dense>
         <ListItem disableGutters>
