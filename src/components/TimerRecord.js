@@ -15,6 +15,7 @@ import { msToHMS } from "../utils/format";
 import { useLongPress } from "use-long-press";
 import { Box } from "@mui/system";
 import { Info } from "@mui/icons-material";
+import { TagChip } from "./TagChip";
 
 export function TimerRecord({ focusState: [focus, setFocus], timer }) {
   const { projects, tags } = useContext(GlobalContext);
@@ -55,21 +56,11 @@ export function TimerRecord({ focusState: [focus, setFocus], timer }) {
               {timer.tags?.length > 0 ? (
                 <>
                   {timer.tags.map((id) => (
-                    <Chip
-                      key={`${timer.id}:${id}`}
-                      label={tags[id]}
-                      size="small"
-                      sx={{ margin: 0.5 }}
-                    />
+                    <TagChip key={`${timer.id}:${id}`} label={tags[id]} />
                   ))}
                 </>
               ) : (
-                <Chip
-                  icon={<Info />}
-                  label="Tap and hold for options"
-                  size="small"
-                  sx={{ margin: 0.5 }}
-                />
+                <TagChip icon={<Info />} label="Tap and hold for options" />
               )}
             </Box>
           </Collapse>
