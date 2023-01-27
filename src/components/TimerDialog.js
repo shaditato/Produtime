@@ -2,7 +2,6 @@ import { useContext } from "react";
 import {
   Box,
   Chip,
-  DialogTitle,
   List,
   ListItem,
   ListItemButton,
@@ -20,11 +19,12 @@ export function TimerDialog({ timer }) {
 
   return (
     <>
-      <DialogTitle
+      <Box
         sx={{
           backgroundColor: COLOURS[project.colour],
           display: "flex",
           flexDirection: "column",
+          padding: 3,
           textAlign: "center",
         }}
       >
@@ -44,7 +44,7 @@ export function TimerDialog({ timer }) {
             ))}
           </Box>
         )}
-      </DialogTitle>
+      </Box>
       <List dense>
         <ListItem disableGutters>
           <ListItemButton>
