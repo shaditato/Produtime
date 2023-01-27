@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
 import { useStopwatch } from "react-timer-hook";
+import { Typography } from "@mui/material";
 import { formatDigits as format } from "../../../utils/format";
 
 export function ActiveTimer({ offsetTimestamp }) {
