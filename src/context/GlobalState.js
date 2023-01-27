@@ -18,6 +18,7 @@ const initialState = {
   activeTimers: [],
   user: null,
   projects: {},
+  tags: {},
   timers: [],
 };
 
@@ -37,6 +38,9 @@ export function GlobalProvider({ children }) {
         const projectsSnapshot = await getDocs(
           collection(db, "users", user.uid, "projects")
         );
+        const tagsSnapshot = await getDocs(
+          collection(db, "users", user.uid, "tags")
+        );
         const timersSnapshot = await getDocs(
           query(
             collection(db, "users", user.uid, "timers"),
@@ -47,6 +51,12 @@ export function GlobalProvider({ children }) {
           return {
             ...projects,
             [doc.id]: doc.data(),
+          };
+        }, {});
+        const tags = tagsSnapshot.docs.reduce((tags, doc) => {
+          return {
+            ...tags,
+            [doc.id]: doc.data().name,
           };
         }, {});
         const timers = timersSnapshot.docs.map((doc) => {
@@ -61,6 +71,7 @@ export function GlobalProvider({ children }) {
             user,
             projects,
             timers,
+            tags,
           },
         });
         toast.success(`Signed in as ${user.displayName}`);

@@ -16,6 +16,7 @@ export function AppReducer(state, action) {
         ...state,
         user: action.payload.user,
         projects: action.payload.projects ?? {},
+        tags: action.payload.tags ?? {},
         timers: action.payload.timers ?? [],
       };
     case "STOP_TIMER":
