@@ -37,6 +37,11 @@ export function TimerDialog({ timer }) {
           {timer.createdAt.toDate().toLocaleString()} to{"\n"}
           {timer.endedAt.toDate().toLocaleString()}
         </Typography>
+        {timer.desc && (
+          <Typography variant="subtitle2" sx={{ marginY: 1 }}>
+            {timer.desc}
+          </Typography>
+        )}
         {timer.tags?.length > 0 && (
           <Box>
             {timer.tags.map((id) => (
