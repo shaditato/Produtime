@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
-import { InvertedButton } from "./InvertedButton";
-import { TimeCards } from "./TimeCards";
-import { Timers } from "./Timers";
-import { TopAppBar } from "./TopAppBar";
-import { GlobalContext } from "../context/GlobalState";
+import { InvertedButton } from "../InvertedButton";
+import { TimeCards } from "../TimeCards";
+import { Timers } from "../Timers";
+import { TopAppBar } from "../TopAppBar";
+import { GlobalContext } from "../../context/GlobalState";
 
 export function SignIn() {
   const { user, signIn } = useContext(GlobalContext);

@@ -15,8 +15,8 @@ import {
   TextField,
 } from "@mui/material";
 import { Add, Circle } from "@mui/icons-material";
-import { GlobalContext } from "../context/GlobalState";
-import { COLOURS } from "../data/constants";
+import { GlobalContext } from "../../context/GlobalState";
+import { COLOURS } from "../../data/constants";
 
 export function ProjectsDialog({ handleClose }) {
   const {

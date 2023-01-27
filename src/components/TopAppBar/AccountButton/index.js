@@ -7,7 +7,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Logout } from "@mui/icons-material";
-import { GlobalContext } from "../context/GlobalState";
+import { GlobalContext } from "../../../context/GlobalState";
 
 export function AccountButton() {
   const { user, signOut } = useContext(GlobalContext);

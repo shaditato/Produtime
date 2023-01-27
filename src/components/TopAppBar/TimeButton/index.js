@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { Dialog, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { Add, Circle, Settings } from "@mui/icons-material";
-import { InvertedButton } from "./InvertedButton";
-import { ProjectsDialog } from "./ProjectsDialog";
-import { GlobalContext } from "../context/GlobalState";
-import { COLOURS } from "../data/constants";
+import { InvertedButton } from "../../InvertedButton";
+import { ProjectsDialog } from "../../ProjectsDialog";
+import { GlobalContext } from "../../../context/GlobalState";
+import { COLOURS } from "../../../data/constants";
 
 export function TimeButton(props) {
   const { createTimer, projects } = useContext(GlobalContext);

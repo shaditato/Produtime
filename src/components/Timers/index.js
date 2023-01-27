@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { TimerRecord } from "./TimerRecord";
-import { GlobalContext } from "../context/GlobalState";
+import { GlobalContext } from "../../context/GlobalState";
 
 export function Timers() {
   const { timers } = useContext(GlobalContext);

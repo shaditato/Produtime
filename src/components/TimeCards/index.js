@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { Stop } from "@mui/icons-material";
 import { ActiveTimer } from "./ActiveTimer";
-import { GlobalContext } from "../context/GlobalState";
-import { COLOURS } from "../data/constants";
+import { GlobalContext } from "../../context/GlobalState";
+import { COLOURS } from "../../data/constants";
 
 export function TimeCards() {
   const { activeTimers, projects, user, stopTimer } = useContext(GlobalContext);

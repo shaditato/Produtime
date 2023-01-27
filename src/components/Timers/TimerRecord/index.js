@@ -8,14 +8,14 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { TimerDialog } from "./TimerDialog";
-import { GlobalContext } from "../context/GlobalState";
-import { COLOURS } from "../data/constants";
-import { msToHMS } from "../utils/format";
+import { TimerDialog } from "../../TimerDialog";
+import { GlobalContext } from "../../../context/GlobalState";
+import { COLOURS } from "../../../data/constants";
+import { msToHMS } from "../../../utils/format";
 import { useLongPress } from "use-long-press";
 import { Box } from "@mui/system";
 import { Info } from "@mui/icons-material";
-import { TagChip } from "./TagChip";
+import { TagChip } from "../../TagChip";
 
 export function TimerRecord({ focusState: [focus, setFocus], timer }) {
   const { projects, tags } = useContext(GlobalContext);
