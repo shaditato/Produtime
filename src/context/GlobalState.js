@@ -68,7 +68,7 @@ export function GlobalProvider({ children }) {
         toast.error("Authentication failed");
       }
     });
-  }, []);
+  }, []); // eslint-disable-line
 
   /** Add new project to database, load in state
    * @param {{ name: String, colour: String, uid: String }} payload new project + uid of signed in user
