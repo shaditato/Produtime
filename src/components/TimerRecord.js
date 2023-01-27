@@ -3,6 +3,7 @@ import {
   Card,
   CardActionArea,
   Chip,
+  Collapse,
   Dialog,
   Toolbar,
   Typography,
@@ -12,18 +13,24 @@ import { GlobalContext } from "../context/GlobalState";
 import { COLOURS } from "../data/constants";
 import { msToHMS } from "../utils/format";
 import { useLongPress } from "use-long-press";
+import { Box } from "@mui/system";
+import { Info } from "@mui/icons-material";
 
-export function TimerRecord({ timer }) {
-  const { projects } = useContext(GlobalContext);
+export function TimerRecord({ focusState: [focus, setFocus], timer }) {
+  const { projects, tags } = useContext(GlobalContext);
   const [open, setOpen] = useState(false);
   const bind = useLongPress(() => setOpen(true));
 
   const handleClose = () => setOpen(false);
+  const toggleFocus = () => {
+    if (focus === timer.id) setFocus(null);
+    else setFocus(timer.id);
+  };
 
   return (
     <>
       <Card elevation={0}>
-        <CardActionArea {...bind()}>
+        <CardActionArea onClick={toggleFocus} {...bind()}>
           <Toolbar>
             <Chip
               label={msToHMS(
@@ -37,6 +44,35 @@ export function TimerRecord({ timer }) {
               {projects[timer.projectId].name}
             </Typography>
           </Toolbar>
+          <Collapse in={focus === timer.id}>
+            <Box
+              sx={{
+                paddingX: { xs: 1.5, sm: 2.5 },
+                paddingTop: 0,
+                paddingBottom: 1,
+              }}
+            >
+              {timer.tags?.length > 0 ? (
+                <>
+                  {timer.tags.map((id) => (
+                    <Chip
+                      key={`${timer.id}:${id}`}
+                      label={tags[id]}
+                      size="small"
+                      sx={{ margin: 0.5 }}
+                    />
+                  ))}
+                </>
+              ) : (
+                <Chip
+                  icon={<Info />}
+                  label="Tap and hold for options"
+                  size="small"
+                  sx={{ margin: 0.5 }}
+                />
+              )}
+            </Box>
+          </Collapse>
         </CardActionArea>
       </Card>
       <Dialog onClose={handleClose} open={open}>

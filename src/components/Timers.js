@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { TimerRecord } from "./TimerRecord";
 import { GlobalContext } from "../context/GlobalState";
 
 export function Timers() {
   const { timers } = useContext(GlobalContext);
+  const focusState = useState(null);
 
   // Create an object to map timers to date strings
   const datedTimers = timers.reduce((accumulator, timer) => {
@@ -40,7 +41,11 @@ export function Timers() {
               {date}
             </Typography>
             {datedTimers[date].map((timer) => (
-              <TimerRecord key={timer.id} timer={timer} />
+              <TimerRecord
+                key={timer.id}
+                focusState={focusState}
+                timer={timer}
+              />
             ))}
           </Box>
         ))
