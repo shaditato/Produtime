@@ -17,6 +17,7 @@
     "react-firebase-hooks": "^3.0.4",
     "react-scripts": "^5.0.1",
     "react-timer-hook": "^3.0.5",
+    "use-long-press": "^2.0.3",
     "use-toast-mui": "^0.0.4",
     "web-vitals": "^1.1.2"
   },

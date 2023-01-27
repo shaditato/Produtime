@@ -1,0 +1,58 @@
+import { useContext } from "react";
+import {
+  Chip,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { GlobalContext } from "../context/GlobalState";
+import { COLOURS } from "../data/constants";
+import { msToHMS } from "../utils/format";
+
+export function TimerDialog({ timer }) {
+  const { projects } = useContext(GlobalContext);
+  const project = projects[timer.projectId];
+
+  return (
+    <>
+      <DialogTitle
+        sx={{
+          backgroundColor: COLOURS[project.colour],
+          display: "flex",
+          flexDirection: "column",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4">{project.name}</Typography>
+        <Chip
+          label={msToHMS(timer.endedAt.toMillis() - timer.createdAt.toMillis())}
+          sx={{ marginY: 1 }}
+        />
+        <Typography variant="caption">
+          {timer.createdAt.toDate().toLocaleString()} to{"\n"}
+          {timer.endedAt.toDate().toLocaleString()}
+        </Typography>
+      </DialogTitle>
+      <List dense>
+        <ListItem disableGutters>
+          <ListItemButton>
+            <ListItemText>Edit Tags</ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disableGutters>
+          <ListItemButton>
+            <ListItemText>Edit Description</ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disableGutters>
+          <ListItemButton>
+            <ListItemText>Delete Timer Record</ListItemText>
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </>
+  );
+}
