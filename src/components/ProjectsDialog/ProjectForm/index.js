@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
   MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { Circle } from "@mui/icons-material";
@@ -49,20 +48,26 @@ export function ProjectForm({ handleClose, id }) {
         {projects[id] ? "Edit Project" : "Create New Project"}
       </DialogTitle>
       <DialogContent sx={{ display: "flex", gap: 1 }}>
-        <Select
+        <TextField
           defaultValue={projects[id]?.colour ?? ""}
-          displayEmpty
           onChange={(event) =>
             setFormInput({ ...formInput, colour: event.target.value })
           }
-          renderValue={(value) => {
-            return (
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <Circle sx={{ color: COLOURS[value] ?? "lightgray" }} />
-              </Box>
-            );
-          }}
           required
+          select
+          SelectProps={{
+            displayEmpty: true,
+            renderValue: (value) => {
+              return (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Circle
+                    fontSize="small"
+                    sx={{ color: COLOURS[value] ?? "lightgray" }}
+                  />
+                </Box>
+              );
+            },
+          }}
           variant="standard"
         >
           {Object.entries(COLOURS).map(([colourKey, hex]) => (
@@ -70,7 +75,7 @@ export function ProjectForm({ handleClose, id }) {
               <Circle sx={{ color: hex }} />
             </MenuItem>
           ))}
-        </Select>
+        </TextField>
         <TextField
           defaultValue={projects[id]?.name ?? ""}
           onChange={(event) =>
@@ -78,9 +83,6 @@ export function ProjectForm({ handleClose, id }) {
           }
           placeholder="My Project Name"
           required
-          sx={{
-            transform: "translateY(1px)",
-          }}
           variant="standard"
         />
       </DialogContent>
