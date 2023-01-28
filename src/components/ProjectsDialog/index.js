@@ -58,8 +58,7 @@ export function ProjectsDialog({ handleClose }) {
     <>
       {dialogState === "PROJECT_LIST" ? (
         <>
-          <DialogTitle>Manage Projects</DialogTitle>
-          <List sx={{ pt: 0 }}>
+          <List dense>
             <ListItem disableGutters>
               <ListItemButton onClick={() => setDialogState("NEW_PROJECT")}>
                 <ListItemIcon>
