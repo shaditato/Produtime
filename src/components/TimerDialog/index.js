@@ -11,7 +11,7 @@ import {
 import { TagChip } from "../TagChip";
 import { GlobalContext } from "../../context/GlobalState";
 import { COLOURS } from "../../data/constants";
-import { msToHMS } from "../../utils/format";
+import { msToHMS } from "../../utils/";
 
 export function TimerDialog({ timer }) {
   const { projects, tags } = useContext(GlobalContext);

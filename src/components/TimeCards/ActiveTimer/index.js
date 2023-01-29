@@ -1,6 +1,6 @@
 import { useStopwatch } from "react-timer-hook";
 import { Typography } from "@mui/material";
-import { formatDigits as format } from "../../../utils/format";
+import { formatDigits as format } from "../../../utils/";
 
 export function ActiveTimer({ offsetTimestamp }) {
   const { seconds, minutes, hours, days } = useStopwatch({

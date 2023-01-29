@@ -15,7 +15,7 @@ import { TagChip } from "../../TagChip";
 import { TimerDialog } from "../../TimerDialog";
 import { GlobalContext } from "../../../context/GlobalState";
 import { COLOURS } from "../../../data/constants";
-import { msToHMS } from "../../../utils/format";
+import { msToHMS } from "../../../utils/";
 
 export function TimerRecord({ focusState: [focus, setFocus], timer }) {
   const { projects, tags } = useContext(GlobalContext);
