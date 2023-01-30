@@ -1,5 +1,12 @@
 import { useContext, useState } from "react";
-import { Dialog, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import {
+  Dialog,
+  Divider,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { Add, Circle, Settings } from "@mui/icons-material";
 import { InvertedButton } from "../../InvertedButton";
 import { ProjectsDialog } from "../../ProjectsDialog";
@@ -61,7 +68,7 @@ export function TimeButton(props) {
             <ListItemIcon>
               <Circle sx={{ color: COLOURS[project.colour] }} />
             </ListItemIcon>
-            {project.name}
+            <Typography noWrap>{project.name}</Typography>
           </MenuItem>
         ))}
       </Menu>
