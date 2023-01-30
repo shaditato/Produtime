@@ -1,1 +1,1 @@
-export { formatDigits, msToHMS } from "./format/index";
+export { formatDigits, msToHMS } from "./format";
