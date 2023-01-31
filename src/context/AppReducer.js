@@ -32,7 +32,10 @@ export function AppReducer(state, action) {
         ...state,
         projects: {
           ...state.projects,
-          [action.payload.id]: action.payload.project,
+          [action.payload.id]: {
+            ...(state.projects[action.payload.id] ?? {}),
+            ...action.payload.project,
+          },
         },
       };
     default:

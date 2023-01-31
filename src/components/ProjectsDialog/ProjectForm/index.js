@@ -22,20 +22,23 @@ export function ProjectForm({ handleClose, id }) {
   const [formInput, setFormInput] = useState({});
 
   const formSubmit = () => {
+    const { name, colour } = formInput;
+
     if (projects[id]) {
       updateProject({
         id,
-        name: formInput.name ?? projects[id].name,
-        colour: formInput.colour ?? projects[id].colour,
+        project: {
+          name: name ?? projects[id].name,
+          ...(colour ? { colour } : {}),
+        },
+        reason: "EDIT",
         uid,
       });
     } else {
-      if (formInput.name === undefined || formInput.colour === undefined) {
-        return;
-      }
+      if (name === undefined || colour === undefined) return;
       createProject({
-        name: formInput.name,
-        colour: formInput.colour,
+        name,
+        colour,
         uid,
       });
     }

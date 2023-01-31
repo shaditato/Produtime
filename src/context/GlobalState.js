@@ -8,6 +8,7 @@ import {
   orderBy,
   setDoc,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useToast } from "use-toast-mui";
@@ -91,18 +92,16 @@ export function GlobalProvider({ children }) {
         colour,
       };
 
-      const docRef = await addDoc(
+      const { id } = await addDoc(
         collection(db, "users", uid, "projects"),
         project
       );
 
       dispatch({
         type: "SET_PROJECT",
-        payload: {
-          id: docRef.id,
-          project,
-        },
+        payload: { id, project },
       });
+
       toast.success(`Created new project "${name}"`);
     } catch (error) {
       toast.error("Failed to create new project");
@@ -110,28 +109,35 @@ export function GlobalProvider({ children }) {
   };
 
   /** Update project in database and state
-   * @param {{ id: String, name: String, colour: String, uid: String }} payload updated project + uid of signed in user
+   * @param {{ id: String, project: Object, uid: String }} payload
+   * project: updated data fields,
+   * reason: "EDIT"
    */
-  const updateProject = async ({ id, name, colour, uid }) => {
+  const updateProject = async ({ id, project, reason, uid }) => {
     try {
-      const project = {
-        name,
-        colour,
-      };
-
-      await setDoc(doc(db, "users", uid, "projects", id), project);
+      await updateDoc(doc(db, "users", uid, "projects", id), project);
 
       dispatch({
         type: "SET_PROJECT",
-        payload: {
-          id,
-          project,
-        },
+        payload: { id, project },
       });
-      toast.success(`Updated project ${name}`);
+
+      switch (reason) {
+        case "EDIT":
+          return toast.success(`Updated project ${project.name}`);
+      }
     } catch (error) {
       toast.error("Failed to update project");
     }
+  };
+
+  /**
+   *
+   * @param {{ archived: Boolean, id: String, uid: String }} payload archive status, project id, uid
+   */
+  const setArchivedProject = async ({ archived, id, uid }) => {
+    try {
+    } catch {}
   };
 
   /** Create activeTimer in state
