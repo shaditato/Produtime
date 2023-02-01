@@ -51,7 +51,7 @@ export function ProjectForm({ handleClose, id }) {
     updateProject({
       id,
       project: {
-        name: projects[id].name,
+        name: projects[id]?.name,
         archived: true,
       },
       reason: "ARCHIVE",
@@ -63,7 +63,7 @@ export function ProjectForm({ handleClose, id }) {
   return (
     <>
       <DialogTitle>
-        {projects[id] ? "Edit Project" : "Create New Project"}
+        {id === "NEW_PROJECT" ? "Create New Project" : "Edit Project"}
       </DialogTitle>
       <DialogContent sx={{ display: "flex", gap: 1 }}>
         <TextField
@@ -103,11 +103,13 @@ export function ProjectForm({ handleClose, id }) {
           required
           variant="standard"
         />
-        <Tooltip arrow placement="top" title="Archive Project">
-          <IconButton onClick={() => handleArchive(id)} sx={{ margin: 0 }}>
-            <Archive />
-          </IconButton>
-        </Tooltip>
+        {id !== "NEW_PROJECT" && (
+          <Tooltip arrow placement="top" title="Archive Project">
+            <IconButton onClick={() => handleArchive(id)} sx={{ margin: 0 }}>
+              <Archive />
+            </IconButton>
+          </Tooltip>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
