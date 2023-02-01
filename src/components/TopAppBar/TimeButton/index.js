@@ -12,6 +12,7 @@ import { InvertedButton } from "../../InvertedButton";
 import { ProjectsDialog } from "../../ProjectsDialog";
 import { GlobalContext } from "../../../context/GlobalState";
 import { COLOURS } from "../../../data/constants";
+import { partitionArchived } from "../../../utils";
 
 export function TimeButton(props) {
   const { createTimer, projects } = useContext(GlobalContext);
@@ -40,6 +41,8 @@ export function TimeButton(props) {
     createTimer({ projectId: event.currentTarget.dataset.id });
   }
 
+  const [active] = partitionArchived(projects);
+
   return (
     <>
       <InvertedButton
@@ -62,8 +65,8 @@ export function TimeButton(props) {
           </ListItemIcon>
           Manage Projects
         </MenuItem>
-        {Object.keys(projects).length !== 0 && <Divider variant="middle" />}
-        {Object.entries(projects).map(([projectId, project]) => (
+        {active.length !== 0 && <Divider variant="middle" />}
+        {active.map(([projectId, project]) => (
           <MenuItem data-id={projectId} key={projectId} onClick={startTimer}>
             <ListItemIcon>
               <Circle sx={{ color: COLOURS[project.colour] }} />

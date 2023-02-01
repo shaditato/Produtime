@@ -6,7 +6,6 @@ import {
   doc,
   getDocs,
   orderBy,
-  setDoc,
   query,
   updateDoc,
 } from "firebase/firestore";
@@ -110,8 +109,8 @@ export function GlobalProvider({ children }) {
 
   /** Update project in database and state
    * @param {{ id: String, project: Object, uid: String }} payload
-   * project: updated data fields,
-   * reason: "EDIT"
+   * project: updated data fields [required: name],
+   * reason: "EDIT" | "ARCHIVE" | "UNARCHIVE"
    */
   const updateProject = async ({ id, project, reason, uid }) => {
     try {
@@ -125,19 +124,16 @@ export function GlobalProvider({ children }) {
       switch (reason) {
         case "EDIT":
           return toast.success(`Updated project ${project.name}`);
+        case "ARCHIVE":
+          return toast.success(`Archived project ${project.name}`);
+        case "UNARCHIVE":
+          return toast.success(`Unarchived project ${project.name}`);
+        default:
+          break;
       }
     } catch (error) {
       toast.error("Failed to update project");
     }
-  };
-
-  /**
-   *
-   * @param {{ archived: Boolean, id: String, uid: String }} payload archive status, project id, uid
-   */
-  const setArchivedProject = async ({ archived, id, uid }) => {
-    try {
-    } catch {}
   };
 
   /** Create activeTimer in state

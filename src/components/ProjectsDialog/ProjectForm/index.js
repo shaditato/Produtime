@@ -5,10 +5,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   MenuItem,
   TextField,
+  Tooltip,
 } from "@mui/material";
-import { Circle } from "@mui/icons-material";
+import { Archive, Circle } from "@mui/icons-material";
 import { GlobalContext } from "../../../context/GlobalState";
 import { COLOURS } from "../../../data/constants";
 
@@ -42,6 +44,19 @@ export function ProjectForm({ handleClose, id }) {
         uid,
       });
     }
+    handleClose();
+  };
+
+  const handleArchive = (id) => {
+    updateProject({
+      id,
+      project: {
+        name: projects[id].name,
+        archived: true,
+      },
+      reason: "ARCHIVE",
+      uid,
+    });
     handleClose();
   };
 
@@ -88,6 +103,11 @@ export function ProjectForm({ handleClose, id }) {
           required
           variant="standard"
         />
+        <Tooltip arrow placement="top" title="Archive Project">
+          <IconButton onClick={() => handleArchive(id)} sx={{ margin: 0 }}>
+            <Archive />
+          </IconButton>
+        </Tooltip>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
