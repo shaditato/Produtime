@@ -16,3 +16,5 @@ export const COLOURS = {
   orange: "#ffcc80",
   deepOrange: "#ffab91",
 };
+
+export const FIRESTORE_MAX_BATCH_SIZE = 500;

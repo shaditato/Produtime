@@ -11,6 +11,18 @@ export function AppReducer(state, action) {
           ...state.activeTimers,
         ],
       };
+    case "DELETE_PROJECT":
+      const { [action.payload.id]: _, ...rest } = state.projects;
+      return {
+        ...state,
+        activeTimers: state.activeTimers.filter(
+          (timer) => timer.projectId !== action.payload.id
+        ),
+        projects: rest,
+        timers: state.timers.filter(
+          (timer) => timer.projectId !== action.payload.id
+        ),
+      };
     case "SET_STATE":
       return {
         ...state,

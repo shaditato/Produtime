@@ -88,7 +88,7 @@ export function ProjectList({ setDialogState }) {
                 </Tooltip>
               }
             >
-              <ListItemButton>
+              <ListItemButton onClick={() => setDialogState(projectId)}>
                 <ListItemIcon>
                   <Circle sx={{ color: COLOURS[project.colour] }} />
                 </ListItemIcon>

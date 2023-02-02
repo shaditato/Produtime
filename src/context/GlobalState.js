@@ -8,11 +8,16 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
+  writeBatch as createWriteBatch,
+  deleteDoc,
 } from "firebase/firestore";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useToast } from "use-toast-mui";
 import { AppReducer } from "./AppReducer";
+import { FIRESTORE_MAX_BATCH_SIZE } from "../data/constants";
 import { auth, db } from "../firebase/config";
+import { chunk } from "../utils/chunk";
 
 const initialState = {
   activeTimers: [],
@@ -104,6 +109,42 @@ export function GlobalProvider({ children }) {
       toast.success(`Created new project "${name}"`);
     } catch (error) {
       toast.error("Failed to create new project");
+    }
+  };
+
+  /** Delete project and all associated timers from database and state
+   * @param {{ id: String, name: String, uid: String }} payload projectId, project name, uid of signed in user
+   */
+  const deleteProject = async ({ id, name, uid }) => {
+    try {
+      const timersSnapshot = await getDocs(
+        query(
+          collection(db, "users", uid, "timers"),
+          where("projectId", "==", id)
+        )
+      );
+
+      // Delete associated timers in batches of max size allowed by Firestore
+      const batches = chunk(timersSnapshot.docs, FIRESTORE_MAX_BATCH_SIZE);
+      const commits = batches.map((batch) => {
+        const writeBatch = createWriteBatch(db);
+        batch.forEach((doc) => writeBatch.delete(doc.ref));
+        return writeBatch.commit();
+      });
+      await Promise.all(commits);
+
+      await deleteDoc(doc(db, "users", uid, "projects", id));
+
+      dispatch({
+        type: "DELETE_PROJECT",
+        payload: { id },
+      });
+
+      toast.success(`Deleted project "${name}" and all associated timers`);
+    } catch (error) {
+      toast.error(
+        "Failed to delete project — some timer records may have been deleted"
+      );
     }
   };
 
@@ -209,6 +250,7 @@ export function GlobalProvider({ children }) {
       value={{
         ...state,
         createProject,
+        deleteProject,
         updateProject,
         createTimer,
         stopTimer,
