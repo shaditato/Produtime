@@ -17,7 +17,7 @@ import { useToast } from "use-toast-mui";
 import { AppReducer } from "./AppReducer";
 import { FIRESTORE_MAX_BATCH_SIZE } from "../data/constants";
 import { auth, db } from "../firebase/config";
-import { chunk } from "../utils/chunk";
+import { chunk } from "../utils/";
 
 const initialState = {
   activeTimers: [],
