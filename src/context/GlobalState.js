@@ -21,7 +21,7 @@ import { chunk } from "../utils/";
 
 const initialState = {
   activeTimers: [],
-  user: null,
+  user: undefined,
   projects: {},
   tags: {},
   timers: [],
@@ -37,8 +37,14 @@ export function GlobalProvider({ children }) {
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       try {
-        // Ignore if signing out
-        if (user === null) return;
+        // Handle sign out
+        if (user === null) {
+          dispatch({
+            type: "SET_STATE",
+            payload: { user },
+          });
+          return;
+        }
         // Read projects & timers from database on sign-in
         const projectsSnapshot = await getDocs(
           collection(db, "users", user.uid, "projects")
@@ -230,15 +236,11 @@ export function GlobalProvider({ children }) {
     }
   };
 
-  /** Sign-out and clear state
+  /** Sign-out using Firebase Authentication
    */
   const signOut = async () => {
     try {
       await auth.signOut();
-      dispatch({
-        type: "SET_STATE",
-        payload: { user: null },
-      });
       toast.success("Signed out");
     } catch (error) {
       toast.error("Failed to sign out");

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import { InvertedButton } from "../InvertedButton";
 import { TimeCards } from "../TimeCards";
@@ -45,14 +45,18 @@ export function SignIn() {
             <Typography sx={{ color: "#fff", marginY: 1 }}>
               Keep track of the time you spend being productive
             </Typography>
-            <InvertedButton
-              onClick={signIn}
-              startIcon={<Google />}
-              sx={{ marginY: 1 }}
-              variant="outline"
-            >
-              Sign In with Google
-            </InvertedButton>
+            {user === null ? (
+              <InvertedButton
+                onClick={signIn}
+                startIcon={<Google />}
+                sx={{ marginY: 1 }}
+                variant="outline"
+              >
+                Sign In with Google
+              </InvertedButton>
+            ) : (
+              <CircularProgress sx={{ color: "white", marginY: 1 }} />
+            )}
           </Box>
         </>
       )}
