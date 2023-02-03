@@ -1,14 +1,7 @@
 import { useContext } from "react";
-import {
-  Box,
-  Chip,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Box, Chip, Typography } from "@mui/material";
 import { TagChip } from "../TagChip";
+import { TimerMenu } from "./TimerMenu";
 import { GlobalContext } from "../../context/GlobalState";
 import { COLOURS } from "../../data/constants";
 import { msToHMS } from "../../utils/";
@@ -50,23 +43,7 @@ export function TimerDialog({ timer }) {
           </Box>
         )}
       </Box>
-      <List dense>
-        <ListItem disableGutters>
-          <ListItemButton>
-            <ListItemText>Edit Tags</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem disableGutters>
-          <ListItemButton>
-            <ListItemText>Edit Description</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem disableGutters>
-          <ListItemButton>
-            <ListItemText>Delete Timer Record</ListItemText>
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <TimerMenu />
     </>
   );
 }
