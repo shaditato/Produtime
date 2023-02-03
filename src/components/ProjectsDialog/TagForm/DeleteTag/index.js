@@ -1,13 +1,13 @@
-import { Delete } from "@mui/icons-material";
+import { useContext } from "react";
 import {
   Button,
-  Chip,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { useContext } from "react";
+import { Delete } from "@mui/icons-material";
+import { TagChip } from "../../../TagChip";
 import { GlobalContext } from "../../../../context/GlobalState";
 
 export function DeleteTag({ handleClose, id }) {
@@ -27,8 +27,8 @@ export function DeleteTag({ handleClose, id }) {
       <DialogTitle noWrap>Delete "{tags[id]}"</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure you want to delete <Chip label={tags[id]} size="small" />
-          ? This tag will be permanently removed from all associated timer
+          Are you sure you want to delete <TagChip label={tags[id]} noMargin />?
+          This tag will be permanently removed from all associated timer
           records!
         </DialogContentText>
       </DialogContent>

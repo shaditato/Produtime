@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import {
-  Chip,
+  Box,
   Divider,
   List,
   ListItem,
@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Add, Edit } from "@mui/icons-material";
+import { TagChip } from "../../TagChip";
 import { GlobalContext } from "../../../context/GlobalState";
-import { Box } from "@mui/system";
 
 export function TagList({ setDialogState }) {
   const { tags } = useContext(GlobalContext);
@@ -34,12 +34,12 @@ export function TagList({ setDialogState }) {
       {sortedTags.length !== 0 ? (
         <Box sx={{ paddingX: 1, textAlign: "center" }}>
           {sortedTags.map(([tagId, tag]) => (
-            <Chip
+            <TagChip
               icon={<Edit />}
               key={tagId}
               label={tag}
               onClick={() => setDialogState(tagId)}
-              sx={{ margin: 0.5 }}
+              size="medium"
             />
           ))}
         </Box>
