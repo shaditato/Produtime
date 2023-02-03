@@ -20,7 +20,10 @@ import { msToHMS } from "../../../utils/";
 export function TimerRecord({ focusState: [focus, setFocus], timer }) {
   const { projects, tags } = useContext(GlobalContext);
   const [open, setOpen] = useState(false);
-  const bind = useLongPress(() => setOpen(true));
+  const bind = useLongPress(() => setOpen(true), {
+    cancelOnMovement: true,
+    threshold: 500,
+  });
 
   const handleClose = () => setOpen(false);
   const toggleFocus = () => {
