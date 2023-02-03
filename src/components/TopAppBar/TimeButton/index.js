@@ -75,7 +75,12 @@ export function TimeButton(props) {
           </MenuItem>
         ))}
       </Menu>
-      <Dialog onClose={handleDialogClose} open={dialogOpen} scroll="body">
+      <Dialog
+        onClose={handleDialogClose}
+        maxWidth="xs"
+        open={dialogOpen}
+        scroll="body"
+      >
         <ProjectsDialog handleClose={handleDialogClose} />
       </Dialog>
     </>

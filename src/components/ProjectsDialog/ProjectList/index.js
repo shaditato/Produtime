@@ -49,7 +49,7 @@ export function ProjectList({ setDialogState }) {
   return (
     <List dense>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => setDialogState("NEW_PROJECT")}>
+        <ListItemButton onClick={() => setDialogState("NEW")}>
           <ListItemIcon>
             <Add />
           </ListItemIcon>

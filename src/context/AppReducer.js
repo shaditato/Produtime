@@ -23,6 +23,20 @@ export function AppReducer(state, action) {
           (timer) => timer.projectId !== action.payload.id
         ),
       };
+    case "DELETE_TAG":
+      const { [action.payload.id]: _tag, ...restTags } = state.tags;
+      return {
+        ...state,
+        tags: restTags,
+        timers: state.timers.map((timer) => {
+          return {
+            ...timer,
+            ...(timer.tags
+              ? { tags: timer.tags.filter((id) => id !== action.payload.id) }
+              : {}),
+          };
+        }),
+      };
     case "SET_STATE":
       return {
         ...state,
@@ -30,6 +44,14 @@ export function AppReducer(state, action) {
         projects: action.payload.projects ?? {},
         tags: action.payload.tags ?? {},
         timers: action.payload.timers ?? [],
+      };
+    case "SET_TAG":
+      return {
+        ...state,
+        tags: {
+          ...state.tags,
+          [action.payload.id]: action.payload.tag.name,
+        },
       };
     case "STOP_TIMER":
       return {

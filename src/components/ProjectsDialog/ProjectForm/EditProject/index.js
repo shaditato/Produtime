@@ -63,7 +63,7 @@ export function EditProject({ handleClose, id }) {
   return (
     <>
       <DialogTitle>
-        {id === "NEW_PROJECT" ? "Create New Project" : "Edit Project"}
+        {id === "NEW" ? "Create New Project" : "Edit Project"}
       </DialogTitle>
       <DialogContent sx={{ display: "flex", gap: 1 }}>
         <TextField
@@ -103,7 +103,7 @@ export function EditProject({ handleClose, id }) {
           required
           variant="standard"
         />
-        {id !== "NEW_PROJECT" && (
+        {id !== "NEW" && (
           <Tooltip arrow placement="top" title="Archive Project">
             <IconButton onClick={() => handleArchive(id)} sx={{ margin: 0 }}>
               <Archive />

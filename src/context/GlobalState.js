@@ -11,6 +11,7 @@ import {
   where,
   writeBatch as createWriteBatch,
   deleteDoc,
+  arrayRemove,
 } from "firebase/firestore";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useToast } from "use-toast-mui";
@@ -183,6 +184,85 @@ export function GlobalProvider({ children }) {
     }
   };
 
+  /** Add new tag to database, load in state
+   * @param {{ name: String uid: String }} payload new tag + uid of signed in user
+   */
+  const createTag = async ({ name, uid }) => {
+    try {
+      const tag = { name };
+
+      const { id } = await addDoc(collection(db, "users", uid, "tags"), tag);
+
+      dispatch({
+        type: "SET_TAG",
+        payload: { id, tag },
+      });
+
+      toast.success(`Created new tag "${name}"`);
+    } catch (error) {
+      toast.error("Failed to create new tag");
+    }
+  };
+
+  /** Delete tag and remove from all associated timers in database and state
+   * @param {{ id: String, name: String, uid: String }} payload tagId, tag name, uid of signed in user
+   */
+  const deleteTag = async ({ id, name, uid }) => {
+    try {
+      const timersSnapshot = await getDocs(
+        query(
+          collection(db, "users", uid, "timers"),
+          where("tags", "array-contains", id)
+        )
+      );
+
+      // Delete associated timers in batches of max size allowed by Firestore
+      const batches = chunk(timersSnapshot.docs, FIRESTORE_MAX_BATCH_SIZE);
+      const commits = batches.map((batch) => {
+        const writeBatch = createWriteBatch(db);
+        batch.forEach((doc) =>
+          writeBatch.update(doc.ref, { tags: arrayRemove(id) })
+        );
+        return writeBatch.commit();
+      });
+      await Promise.all(commits);
+
+      await deleteDoc(doc(db, "users", uid, "tags", id));
+
+      dispatch({
+        type: "DELETE_TAG",
+        payload: { id },
+      });
+
+      toast.success(
+        `Deleted tag "${name}" and removed from all associated timers`
+      );
+    } catch (error) {
+      toast.error(
+        "Failed to delete tag — some timer records may have been updated"
+      );
+    }
+  };
+
+  /** Update tag in database and state
+   * @param {{ id: String, name: String, uid: String }} payload tagId, new tag name, uid of signed-in user
+   */
+  const updateTag = async ({ id, name, uid }) => {
+    try {
+      const tag = { name };
+      await updateDoc(doc(db, "users", uid, "tags", id), tag);
+
+      dispatch({
+        type: "SET_TAG",
+        payload: { id, tag },
+      });
+
+      return toast.success(`Updated tag "${name}"`);
+    } catch (error) {
+      toast.error("Failed to update tag");
+    }
+  };
+
   /** Create activeTimer in state
    * @param {{ projectId: String }} payload projectId of project associated with timer
    */
@@ -254,6 +334,9 @@ export function GlobalProvider({ children }) {
         createProject,
         deleteProject,
         updateProject,
+        createTag,
+        deleteTag,
+        updateTag,
         createTimer,
         stopTimer,
         signIn,
