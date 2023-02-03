@@ -69,7 +69,7 @@ export function TimerRecord({ focusState: [focus, setFocus], timer }) {
           </Collapse>
         </CardActionArea>
       </Card>
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog onClose={handleClose} open={open} scroll="body">
         <TimerDialog timer={timer} />
       </Dialog>
     </>
