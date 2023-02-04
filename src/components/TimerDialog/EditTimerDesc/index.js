@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Button,
   Chip,
@@ -7,12 +7,22 @@ import {
   TextField,
 } from "@mui/material";
 import { Info } from "@mui/icons-material";
+import { GlobalContext } from "../../../context/GlobalState";
 
 export function EditTimerDesc({ handleClose, timer }) {
+  const {
+    user: { uid },
+    updateTimer,
+  } = useContext(GlobalContext);
   const [formInput, setFormInput] = useState(timer.desc ?? "");
 
   const formSubmit = () => {
-    // updateTimer({ id, timer, uid });
+    updateTimer({
+      id: timer.id,
+      timer: { desc: formInput },
+      reason: "DESC",
+      uid,
+    });
     handleClose();
   };
 

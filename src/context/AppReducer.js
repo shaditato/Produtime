@@ -37,6 +37,11 @@ export function AppReducer(state, action) {
           };
         }),
       };
+    case "DELETE_TIMER":
+      return {
+        ...state,
+        timers: state.timers.filter((timer) => timer.id !== action.payload.id),
+      };
     case "SET_STATE":
       return {
         ...state,
@@ -52,6 +57,15 @@ export function AppReducer(state, action) {
           ...state.tags,
           [action.payload.id]: action.payload.tag.name,
         },
+      };
+    case "SET_TIMER":
+      return {
+        ...state,
+        timers: state.timers.map((timer) =>
+          timer.id === action.payload.id
+            ? { ...timer, ...action.payload.timer }
+            : timer
+        ),
       };
     case "STOP_TIMER":
       return {

@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Button,
   DialogActions,
@@ -5,10 +6,15 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { GlobalContext } from "../../../context/GlobalState";
 
 export function DeleteTimer({ handleClose, id }) {
+  const {
+    user: { uid },
+    deleteTimer,
+  } = useContext(GlobalContext);
   const handleDelete = () => {
-    // deleteTimer({ id, uid });
+    deleteTimer({ id, uid });
     handleClose();
   };
 

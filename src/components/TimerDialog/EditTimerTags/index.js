@@ -11,11 +11,20 @@ import { GlobalContext } from "../../../context/GlobalState";
 import { TagChip } from "../../TagChip";
 
 export function EditTimerTags({ handleClose, timer }) {
-  const { tags } = useContext(GlobalContext);
+  const {
+    tags,
+    user: { uid },
+    updateTimer,
+  } = useContext(GlobalContext);
   const [formInput, setFormInput] = useState(timer.tags ?? []);
 
   const formSubmit = () => {
-    // updateTimer({ id, timer, uid });
+    updateTimer({
+      id: timer.id,
+      timer: { tags: formInput },
+      reason: "TAGS",
+      uid,
+    });
     handleClose();
   };
 

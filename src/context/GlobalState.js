@@ -277,6 +277,24 @@ export function GlobalProvider({ children }) {
     });
   };
 
+  /** Delete timer record from database and state
+   * @param {{ id: String, uid: String }} payload timerId, uid of signed in user
+   */
+  const deleteTimer = async ({ id, uid }) => {
+    try {
+      await deleteDoc(doc(db, "users", uid, "timers", id));
+
+      dispatch({
+        type: "DELETE_TIMER",
+        payload: { id },
+      });
+
+      toast.success("Deleted timer record");
+    } catch (error) {
+      toast.error("Failed to delete timer record");
+    }
+  };
+
   /** Remove activeTimer from state and write to database
    * @param {{ createdAt: Timestamp, projectId: String, uid: String }} payload activeTimer info + uid of signed in user
    */
@@ -302,6 +320,33 @@ export function GlobalProvider({ children }) {
       toast.success("Created new timer record");
     } catch (error) {
       toast.error("Failed to create new timer record");
+    }
+  };
+
+  /** Update timer in database and state
+   * @param {{ id: String, timer: Object, uid: String }} payload
+   * timer: updated data fields,
+   * reason: "DESC" | "TAGS"
+   */
+  const updateTimer = async ({ id, timer, reason, uid }) => {
+    try {
+      await updateDoc(doc(db, "users", uid, "timers", id), timer);
+
+      dispatch({
+        type: "SET_TIMER",
+        payload: { id, timer },
+      });
+
+      switch (reason) {
+        case "DESC":
+          return toast.success("Updated timer record description");
+        case "TAGS":
+          return toast.success("Updated timer record tags");
+        default:
+          break;
+      }
+    } catch (error) {
+      toast.error("Failed to update timer record");
     }
   };
 
@@ -338,7 +383,9 @@ export function GlobalProvider({ children }) {
         deleteTag,
         updateTag,
         createTimer,
+        deleteTimer,
         stopTimer,
+        updateTimer,
         signIn,
         signOut,
       }}
