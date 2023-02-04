@@ -1,13 +1,23 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Box, Chip, Typography } from "@mui/material";
 import { TagChip } from "../TagChip";
 import { TimerMenu } from "./TimerMenu";
 import { GlobalContext } from "../../context/GlobalState";
 import { COLOURS } from "../../data/constants";
 import { msToHMS } from "../../utils/";
+import { EditTimerDesc } from "./EditTimerDesc";
+import { DeleteTimer } from "./DeleteTimer";
+import { EditTimerTags } from "./EditTimerTags";
 
-export function TimerDialog({ timer }) {
+export function TimerDialog({ handleClose, timer }) {
   const { projects, tags } = useContext(GlobalContext);
+  /**
+   * MENU: Display menu of actions
+   * EDIT_TAGS: Provide dialog form to edit associated tags
+   * EDIT_DESC: Provide dialog form to edit description
+   * DELETE: Provide dialog to confirm deletion of timer record
+   */
+  const [dialogState, setDialogState] = useState("MENU");
   const project = projects[timer.projectId];
 
   return (
@@ -30,12 +40,12 @@ export function TimerDialog({ timer }) {
           {timer.createdAt.toDate().toLocaleString()} to{"\n"}
           {timer.endedAt.toDate().toLocaleString()}
         </Typography>
-        {timer.desc && (
+        {dialogState === "MENU" && timer.desc && (
           <Typography variant="subtitle2" sx={{ marginY: 1 }}>
             {timer.desc}
           </Typography>
         )}
-        {timer.tags?.length > 0 && (
+        {dialogState === "MENU" && timer.tags?.length > 0 && (
           <Box>
             {timer.tags.map((id) => (
               <TagChip key={`${timer.id}-dialog:${id}`} label={tags[id]} />
@@ -43,7 +53,16 @@ export function TimerDialog({ timer }) {
           </Box>
         )}
       </Box>
-      <TimerMenu />
+      {dialogState === "MENU" && <TimerMenu setDialogState={setDialogState} />}
+      {dialogState === "EDIT_TAGS" && (
+        <EditTimerTags handleClose={handleClose} timer={timer} />
+      )}
+      {dialogState === "EDIT_DESC" && (
+        <EditTimerDesc handleClose={handleClose} timer={timer} />
+      )}
+      {dialogState === "DELETE" && (
+        <DeleteTimer handleClose={handleClose} id={timer.id} />
+      )}
     </>
   );
 }

@@ -7,11 +7,11 @@ import {
 } from "@mui/material";
 import { Delete, Label, Notes } from "@mui/icons-material";
 
-export function TimerMenu() {
+export function TimerMenu({ setDialogState }) {
   return (
     <List dense>
       <ListItem disablePadding>
-        <ListItemButton>
+        <ListItemButton onClick={() => setDialogState("EDIT_TAGS")}>
           <ListItemIcon>
             <Label />
           </ListItemIcon>
@@ -19,7 +19,7 @@ export function TimerMenu() {
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton>
+        <ListItemButton onClick={() => setDialogState("EDIT_DESC")}>
           <ListItemIcon>
             <Notes />
           </ListItemIcon>
@@ -27,7 +27,7 @@ export function TimerMenu() {
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton>
+        <ListItemButton onClick={() => setDialogState("DELETE")}>
           <ListItemIcon>
             <Delete />
           </ListItemIcon>
