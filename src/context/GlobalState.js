@@ -300,6 +300,11 @@ export function GlobalProvider({ children }) {
    */
   const stopTimer = async ({ createdAt, projectId, uid }) => {
     try {
+      dispatch({
+        type: "SET_TIMER_LOADING",
+        payload: { createdAt, loading: true },
+      });
+
       const timer = {
         createdAt,
         endedAt: Timestamp.now(),
@@ -320,6 +325,10 @@ export function GlobalProvider({ children }) {
       toast.success("Created new timer record");
     } catch (error) {
       toast.error("Failed to create new timer record");
+      dispatch({
+        type: "SET_TIMER_LOADING",
+        payload: { createdAt, loading: false },
+      });
     }
   };
 

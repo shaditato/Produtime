@@ -5,6 +5,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  CircularProgress,
   Divider,
   Typography,
 } from "@mui/material";
@@ -59,9 +60,16 @@ export function TimeCards() {
                 <CardActions>
                   <Button
                     color="inherit"
+                    disabled={timer.loading}
                     data-created={createdAtMS}
                     onClick={endTimer}
-                    startIcon={<Stop />}
+                    startIcon={
+                      timer.loading ? (
+                        <CircularProgress color="inherit" size={24} />
+                      ) : (
+                        <Stop />
+                      )
+                    }
                   >
                     Stop Timer
                   </Button>

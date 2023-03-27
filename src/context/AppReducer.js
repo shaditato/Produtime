@@ -7,6 +7,7 @@ export function AppReducer(state, action) {
           {
             createdAt: action.payload.createdAt,
             projectId: action.payload.projectId,
+            loading: false,
           },
           ...state.activeTimers,
         ],
@@ -64,6 +65,15 @@ export function AppReducer(state, action) {
         timers: state.timers.map((timer) =>
           timer.id === action.payload.id
             ? { ...timer, ...action.payload.timer }
+            : timer
+        ),
+      };
+    case "SET_TIMER_LOADING":
+      return {
+        ...state,
+        activeTimers: state.activeTimers.map((timer) =>
+          timer.createdAt.isEqual(action.payload.createdAt)
+            ? { ...timer, loading: action.payload.loading }
             : timer
         ),
       };
